@@ -15,6 +15,8 @@ class Game:
         self.WINDOW_WIDTH = WINDOW_WIDTH
         self.WINDOW_HEIGHT=WINDOW_HEIGHT
 
+        self.window = pygame.display.set_mode([self.WINDOW_WIDTH,self.WINDOW_HEIGHT])
+
         # set up variables
         self.mode = "play"
     
@@ -36,11 +38,9 @@ class Game:
         self.camY-=(zoomCenter[1]-self.camY)*(zoomRatio-1)
         self.zoom=newZoom
 
-
-    def run(self):
-
-        self.window = pygame.display.set_mode([self.WINDOW_WIDTH,self.WINDOW_HEIGHT])
-        self.gameWorld = world.World(self.WORLD_WIDTH,self.WORLD_HEIGHT,defaultZooms=self.DEFAULT_ZOOMS)
+    def setup(self, load_queue = None):
+        self.gameWorld = world.World(self.WORLD_WIDTH,self.WORLD_HEIGHT,defaultZooms=self.DEFAULT_ZOOMS, loading_queue=load_queue)
+        
         self.clock = pygame.time.Clock()
         self.keysDown = {pygame.K_w:False,
                          pygame.K_a:False,
@@ -49,8 +49,14 @@ class Game:
         self.zoom=self.DEFAULT_ZOOMS[0]
         self.camX,self.camY=self.getWorldCenteredCam()
 
+        if load_queue:
+            load_queue.put(100)
+
+    def run(self):
+        
         previousTime=pygame.time.get_ticks()
         running = True
+ 
         while running:
 
             # get mouse pos

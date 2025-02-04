@@ -24,9 +24,15 @@ class Terrain:
         self.onscreenAirPockets=[]
     
     # generate caves/nests/decorations
-    def generate(self):
-        for i in range(int(self.worldHeight/100)):
-            for j in range(int(self.worldWidth/1000)):
+    def generate(self, loading_queue=None):
+        for i in range(self.worldHeight//100):
+            for j in range(self.worldWidth//1000):
+
+                if loading_queue:
+                    # value = loading_queue.get()
+                    # if value == 100: return
+                    # else: loading_queue.put(value)
+                    loading_queue.put(100*(i*self.worldWidth//100+j)/(self.worldHeight//100*self.worldWidth//100))
 
                 if random.randint(1,10)==1:
                     self.generateSkinnyCave(j*1000+random.randint(0,1000),random.randint(0,int((self.worldHeight-500)/4)),random.randint(20,80),random.random()*2*math.pi)

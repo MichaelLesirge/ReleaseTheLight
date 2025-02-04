@@ -10,7 +10,7 @@ for i in range(5):
 class World:
 
     # set up and create world
-    def __init__(self, worldWidth, worldHeight, defaultZooms=[0.1,2]):
+    def __init__(self, worldWidth, worldHeight, defaultZooms=[0.1,2], loading_queue=None):
 
         # set up world data
         self.terrain = terrain.Terrain(worldWidth,worldHeight,defaultZooms=defaultZooms)
@@ -21,11 +21,11 @@ class World:
         self.player= aplayer.Player(worldWidth/2,-200)
 
         # procedural generation
-        self.generateWorld()
+        self.generateWorld(loading_queue)
     
     # generate caves/nests/decorations
-    def generateWorld(self):
-        self.terrain.generate()
+    def generateWorld(self, loading_queue=None):
+        self.terrain.generate(loading_queue)
     
     # create an air pocket at x, y with specified radius
     def addAirPocket(self, x, y, radius):
